@@ -1,4 +1,4 @@
-# grape_ref_guided_assembly
+&#35; grape_ref_guided_assembly
 
 Modules:
 
@@ -35,27 +35,27 @@ refRed=/UCHC/PROJECTS/Vitis-genome/guided_assembly/Vitis_10kb
 primerFile=/UCHC/PROJECTS/Vitis-genome/guided_assembly/Programs/AdapterSeq_new.fa
 primerFileMP=/UCHC/PROJECTS/Vitis-genome/guided_assembly/Programs/AdapterSeqMP_new.fa
 
-NThreads=32      # set the number of threads of every parallelizable step
+NThreads=32      &#35; set the number of threads of every parallelizable step
 maxReadLength=100
-kmer=61         #define best K (need to be adapted)
+kmer=61         &#35;define best K (need to be adapted)
 </pre>
 
 <strong>Possible problem variables:</strong>
 These variables were unchanged from the source from which this template was taken. Check each step for the occurence of these variables and _how_ they're being used.
 
 <pre style="color: silver; background: black;">
-# mate-pair libraries ---------------------
+&#35; mate-pair libraries ---------------------
 mateName=Aly_sim_Mate
-mateLib=(3000 5000 7000 11000 15000)      # set insertion libraries
-mateInsLow=(2000 4000 6000 9000 13000)    # lower bound of insertion size
-mateInsHigh=(4000 6000 8000 13000 17000)  # upper bound of insertion size
-mateLibsd=(400 400 400 400 400)           # sd of insertion size
+mateLib=(3000 5000 7000 11000 15000)      &#35; set insertion libraries
+mateInsLow=(2000 4000 6000 9000 13000)    &#35; lower bound of insertion size
+mateInsHigh=(4000 6000 8000 13000 17000)  &#35; upper bound of insertion size
+mateLibsd=(400 400 400 400 400)           &#35; sd of insertion size
 
-# list of files with forward reads according to lib array
+&#35; list of files with forward reads according to lib array
 mateReads1=(Aly_3kb_1.fq Aly_5kb_1.fq Aly_7kb_1.fq Aly_11kb_1.fq Aly_15kb_1.fq)
-# list of files with reverse reads according to lib array
+&#35; list of files with reverse reads according to lib array
 mateReads2=(Aly_3kb_2.fq Aly_5kb_2.fq Aly_7kb_2.fq Aly_11kb_2.fq Aly_15kb_2.fq)
-# short names of libraries
+&#35; short names of libraries
 mateShortNames=(Aly_3kb Aly_5kb Aly_7kb Aly_11kb Aly_15kb)</pre>
 
 Concatenated trimmed reads (paired-end):
@@ -83,21 +83,21 @@ log=${workPath}/log_${name}_soap.txt
   fastqcOut=${workPathFiles}/FastQC_het
   mkdir -p ${fastqcOut}
 
-  for i in ${!lib[*]}  #for all indexes in the array
+  for i in ${!lib[*]}  &#35;for all indexes in the array
   do
     fastqc -t ${NThreads} -o ${fastqcOut} ${reads1[i]} ${reads2[i]}
   done
 
-  for i in ${!mateLib[*]}  #for all indexes in the array
+  for i in ${!mateLib[*]}  &#35;for all indexes in the array
   do
     fastqc -t ${NThreads} -o ${fastqcOut} ${mateReads1[i]} ${mateReads2[i]}
   done
 
-  # quality/adapter trimming --------
-  # - remove Illumina adapters provided in the primer files
-  # - remove leading and trailing low quality basses (<3) or N
-  # - 4 base sliding window -> remove when average quality is < 15
-  # - remove reads which are shorter than 40 bp
+  &#35; quality/adapter trimming --------
+  &#35; - remove Illumina adapters provided in the primer files
+  &#35; - remove leading and trailing low quality basses (<3) or N
+  &#35; - 4 base sliding window -> remove when average quality is < 15
+  &#35; - remove reads which are shorter than 40 bp
   echo "quality/adapter trimming..."
   echo "quality/adapter trimming..." >> $log
 
@@ -108,7 +108,7 @@ log=${workPath}/log_${name}_soap.txt
   read1TrimUnPair=()
   read2TrimPair=()
   read2TrimUnPair=()
-  for i in ${!lib[*]}  #for all indexes in the array
+  for i in ${!lib[*]}  &#35;for all indexes in the array
   do
     read1TrimPair[i]=${trimOut}/${shortNames[i]}_R1_trimPair.fastq
     read1TrimUnPair[i]=${trimOut}/${shortNames[i]}_R1_trimUnPair.fastq
@@ -124,7 +124,7 @@ INGWINDOW:4:15 MINLEN:40 >> $log
   mateRead1TrimUnPair=()
   mateRead2TrimPair=()
   
-    for i in ${!mateLib[*]}  #for all indexes in the array
+    for i in ${!mateLib[*]}  &#35;for all indexes in the array
   do
     mateRead1TrimPair[i]=${trimOut}/${mateShortNames[i]}_R1_trimPair.fastq
     mateRead1TrimUnPair[i]=${trimOut}/${mateShortNames[i]}_R1_trimUnPair.fastq
@@ -137,16 +137,16 @@ LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:40 >> $log
   done
 
 
-  # quality check ----------
+  &#35; quality check ----------
   echo "quality check of trimmed reads..."
   echo "quality check of trimmed reads..." >> $log
 
-  for i in ${!lib[*]}  #for all indexes in the array
+  for i in ${!lib[*]}  &#35;for all indexes in the array
   do
     fastqc -t ${NThreads} -o ${fastqcOut} ${read1TrimPair[i]} ${read2TrimPair[i]} ${read1TrimUnPair[i]} ${read2TrimUnPair[i]}
   done
 
-  for i in ${!mateLib[*]}  #for all indexes in the array
+  for i in ${!mateLib[*]}  &#35;for all indexes in the array
   do
     fastqc -t ${NThreads} -o ${fastqcOut} ${mateRead1TrimPair[i]} ${mateRead2TrimPair[i]} ${mateRead1TrimUnPair[i]} ${mateRead2TrimU
 ir[i]}
@@ -155,32 +155,32 @@ ir[i]}
 
 <h2 id="Second_Point_Header">Step 2 (aligning reads to reference) (BEING CHECKED FOR ERRORS)</h2>
 <pre style="color: silver; background: black;">
-#          and define blocks and superblocks
-#######################################################
-  # prepare Reference ---------
+&#35;          and define blocks and superblocks
+&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;
+  &#35; prepare Reference ---------
   echo "prepare reference..."
   echo "prepare reference..." >> $log
 
-  #remove scaffolds shorter than 10 kb
+  &#35;remove scaffolds shorter than 10 kb
   java -jar ${progRemovShortSeq} -i $ref -o ${refRed}.fa -length 10000
 
-  #create index files
+  &#35;create index files
   ${progSamtools} faidx ${refRed}.fa
   java -jar /isg/shared/apps/picard/picard-tools-2.9.2/picard.jar CreateSequenceDictionary R=${refRed}.fa O=${refRed}.dict
 
 
-  # map reads against reference ----------
+  &#35; map reads against reference ----------
   echo "run reference mapping..."
   echo "run reference mapping..." >> $log
 
   cd ${workPath}
 
-  #merge unpaired files
+  &#35;merge unpaired files
   readTrimUnPair=${trimOut}/${name}_trimUnpair_mod.fastq
   cat ${read1TrimUnPair[*]} ${read2TrimUnPair[*]} > ${readTrimUnPair}
   libUnpair=Unpair
 
-  # index reference file
+  &#35; index reference file
   echo "run reference mapping..."
   bowtie2-build ${refRed}.fa ${refRed}
 
@@ -192,7 +192,7 @@ ir[i]}
   bowtieFailUnPair1=()
   bowtieFailUnPair2=()
   count=0
-  for i in ${!lib[*]}  #for all indexes in the array
+  for i in ${!lib[*]}  &#35;for all indexes in the array
   do
     mappedAll[i]=${workPath}/${shortNames[i]}_all.sorted.bam
     unmapped[i]=${workPath}/${shortNames[i]}_unmapped.sorted.bam
@@ -206,11 +206,11 @@ ir[i]}
 } -U ${read1TrimUnPair[i]},${read2TrimUnPair[i]} | samtools view -bS - | samtools sort - -T ${shortNames[i]} -o ${mappedAll[i]}
       ${progSamtools} index ${mappedAll[i]}
 
-      #filter unmapped reads
+      &#35;filter unmapped reads
       samtools view -b -F 4 ${mappedAll[i]} > ${mapped[i]}
       samtools index ${mappped[i]}
 
-      #get unmapped reads
+      &#35;get unmapped reads
       samtools view -b -f 4 ${mappedAll[i]} > ${unmapped[i]}
       samtools view -b -f 9 ${unmapped[i]} > ${unmapped[i]%.sorted.bam}_pair.sorted.bam
       java -jar /isg/shared/apps/picard/picard-tools-2.9.2/picard.jar SamToFastq INPUT=${unmapped[i]%.sorted.bam}_pair.sorted.bam FASTQ
@@ -223,13 +223,13 @@ ir[i]}
      bamtools stats -in ${mappedAll[i]} >> $log
      echo "--> ${mappedAll[i]}" >> $log
 
-     #filter for mapping quality >=10
+     &#35;filter for mapping quality >=10
      samtools view -b -q 10 ${mapped[i]} > ${mappedFiltered[i]}
      bamtools stats -in ${mappedFiltered[i]} >> $log
      echo "--> ${mappedFiltered[i]}" >> $log
 
-     #check insertion size
-     #java -jar /isg/shared/apps/picard/picard-tools-2.9.2/picard.jar CollectInsertSizeMetrics R=${refRed}.fa I=${mapped[i]} O=${mappe
+     &#35;check insertion size
+     &#35;java -jar /isg/shared/apps/picard/picard-tools-2.9.2/picard.jar CollectInsertSizeMetrics R=${refRed}.fa I=${mapped[i]} O=${mappe
 [i]%.bam}_insertSize.txt HISTOGRAM_FILE=${mapped[i]%.bam}_insertSizeHist.pdf
    ) &
    let count+=1
@@ -244,7 +244,7 @@ ir[i]}
   mateBowtieFailUnPair1=()
   mateBowtieFailUnPair2=()
   count=0
-  for i in ${!mateLib[*]}  #for all indexes in the array
+  for i in ${!mateLib[*]}  &#35;for all indexes in the array
   do
     mateMappedAll[i]=${workPath}/${mateShortNames[i]}_all.sorted.bam
     mateMapped[i]=${workPath}/${mateShortNames[i]}.sorted.bam
