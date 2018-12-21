@@ -20,12 +20,13 @@ module load bamtools/2.5.1
 module load SOAP-denovo/2.04</pre>
 
 Non-module programs:
+<pre style="color: silver; background: black;">
 progPath=/UCHC/PROJECTS/Vitis-genome/guided_assembly/Programs/
 progRemovShortSeq=${progPath}/RemoveShortSeq.jar
 progGetBlocks=${progPath}/GetBlocks.jar
 progFastaToAmos=${progPath}/FastaToAmos.jar
 progWriteSoapConfig=${progPath}/WriteSoapConfig.jar
-progFastaStats=${progPath}/FastaStats.jar
+progFastaStats=${progPath}/FastaStats.jar</pre>
 
 Global variables:
 <pre style="color: silver; background: black;">
