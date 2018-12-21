@@ -41,7 +41,7 @@ maxReadLength=100
 kmer=61         &#35;define best K (need to be adapted)
 </pre>
 
-<strong>Possible problem variables:</strong>
+<strong>Possible problem variables:</strong><br>
 These variables were unchanged from the source from which this template was taken. Check each step for the occurence of these variables and _how_ they're being used.
 
 <pre style="color: silver; background: black;">
